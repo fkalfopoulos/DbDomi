@@ -13,12 +13,12 @@
     <img class="img-fluid" id="logo" src="~/images/domi2.jpg" />
 </div>
 <br />
-
+<br />
 @if (User.Identity.IsAuthenticated)
 {
     @if (!User.IsInRole("Admin"))
     {
-        <p> Thank you @User.Identity.Name for your registration to our site. </p>
+        <p align="center"> Thank you <b>@User.Identity.Name</b> for your registration to our site. </p>
 
 
     }
@@ -61,7 +61,7 @@
                         <th>@client.FirstName</th>
                         <th>@client.LastName</th>
                         <th>@client.Email</th>
-                        <th>@client.Comment</th>
+                        <th>@client.PhoneNumber</th>
                         <th>@client.Comment</th>
 
                     </tr>

@@ -13,17 +13,22 @@ using Microsoft.EntityFrameworkCore;
 using DbDomi.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using DbDomi.Models;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace DbDomi
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private readonly IHostingEnvironment env;
+        public IConfiguration Configuration { get; }
+
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
+            this.env = env;
         }
 
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -38,15 +43,19 @@ namespace DbDomi
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>()
+            services.AddIdentity<User, IdentityRole>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+           
+
+
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider services)
         {
             if (env.IsDevelopment())
             {
@@ -63,15 +72,50 @@ namespace DbDomi
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-
+            app.UseFileServer();
             app.UseAuthentication();
 
             app.UseMvc(routes =>
             {
-                routes.MapRoute(
+                routes.MapRoute( 
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+              
             });
+
+            CreateUserRoles(services).Wait();
+        }
+
+        private async Task CreateUserRoles(IServiceProvider serviceProvider)
+
+        {
+            var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var UserManager = serviceProvider.GetRequiredService<UserManager<User>>();
+
+            IdentityResult roleResult;
+
+            var roleCheck = await RoleManager.RoleExistsAsync("Admin");
+            if (!roleCheck)
+            {
+                roleResult = await RoleManager.CreateAsync(new IdentityRole("Admin"));
+            }
+            //Assign Admin role to the main User here we have given our newly registered 
+
+            User user = await UserManager.FindByEmailAsync("administrator@gmail.com");
+            if (user is null)
+            {
+                user = new User
+                {
+                    UserName = "administrator@gmail.com",
+                    Email = "administrator@gmail.com",
+                    PhoneNumber = "6986985885",
+                    UserAvatar = "defUserAvatar.jpg",
+                    RegisterDate = DateTime.Now
+
+                };
+                var result = await UserManager.CreateAsync(user, "asdQWE123!@#");
+            }
+            await UserManager.AddToRoleAsync(user, "Admin");
         }
     }
 }

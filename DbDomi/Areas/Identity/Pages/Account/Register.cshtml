@@ -4,14 +4,10 @@
     ViewData["Title"] = "Register";
 }
 
-<h1>@ViewData["Title"]</h1>
-
-
-
 
 <head>
 
-    <title>Register Form for DomiDB</title>
+
     <!-- Icons font CSS-->
     <link href="~/css/font-awesome.min.css" rel="stylesheet" media="all">
     <link href="~/css/material-design-iconic-font.min.css" rel="stylesheet" media="all">
@@ -31,8 +27,8 @@
                 <h2 class="title">Event Registration Form</h2>
             </div>
             <div class="card-body">
-               
-                <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+
+                <form asp-route-returnUrl="@Model.ReturnUrl" method="post" enctype="multipart/form-data">
                     <div asp-validation-summary="All" class="text-danger"></div>
 
                     <div class="form-row">
@@ -62,7 +58,7 @@
                         <div class="value">
                             <div class="input-group">
 
-                                <input asp-for="Input.ConfirmPassword" class="input--style-5" >
+                                <input asp-for="Input.ConfirmPassword" class="input--style-5">
                                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
                             </div>
                         </div>
@@ -81,28 +77,67 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="name">Role</div>
+                    </div>  <div class="form-row">
+                        <div class="name">FirstName</div>
                         <div class="value">
-                            <div class="input-group">
-                                <div class="rs-select2 js-select-simple select--no-search">
+                            <div class="row row-refine">
 
-                                    <div class="form-group">
-                                        <label asp-for="Input.UserRole"></label>
-                                        <select asp-for="Input.UserRole" asp-items="@(new SelectList(Enum.GetValues(typeof(Models.Role))))" class="form-control">
-                                            <option>Please select one</option>
-                                        </select>
+                                <div class="col-9">
+                                    <div class="input-group-desc">
+                                        <input asp-for="Input.Firstname" class="input--style-5">
+                                        <span asp-validation-for="Input.Firstname" class="text-danger"></span>
+                                        <label class="label--desc">Firstname</label>
                                     </div>
-
-
-
-
-                                    <div class="select-dropdown"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>  <div class="form-row">
+                        <div class="name">LastName</div>
+                        <div class="value">
+                            <div class="row row-refine">
+                                <div class="col-9">
+                                    <div class="input-group-desc">
+                                        <input asp-for="Input.Lastname" class="input--style-5">
+                                        <span asp-validation-for="Input.Lastname" class="text-danger"></span>
+                                        <label class="label--desc">LastName</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div class="form-row">
+                        <div class="name">User Photo</div>
+                        <div class="value">
+                            <div class="row row-refine">
+                                <div class="col-9">
+                                    <div class="input-group-desc">
+                                        <input type="file" asp-for="Input.UserAvatar" class="input--style-5">
+                                        <label class="label--desc">User Pic</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row" >
+                        <div class="name">Comments</div>
+                        <div class="value">
+                            <div class="row row-refine">
+                                <div class="col-9">
+                                    <div class="input-group-desc" >
+                                        <input asp-for="Input.Comment" class="input--style-5" rows="10">
+                                        <span asp-validation-for="Input.Comment" class="text-danger"></span>
+                                        <label class="label--desc">Leave a comment</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                        
+                       
+                        
+
+                    
+
                     <div class="form-row p-t-20">
                         <label class="label label--block">You want to subscribe to the e-mail newsletter?</label>
                         <div class="p-t-15">
@@ -122,21 +157,21 @@
                         <button class="btn btn--radius-2 btn--red" type="submit">Register</button>
                     </div>
                 </form>
-</div>
+            </div>
         </div>
     </div>
 </div>
-<!-- Jquery JS-->
-<script src="vendor/jquery/jquery.min.js"></script>
-<!-- Vendor JS-->
-<script src="~/js/select2.min.js"></script>
-<script src="~/js/moment.min.js"></script>
-<script src="~/js/daterangepicker.js"></script>
-<!-- Main JS-->
-<script src="js/global.js"></script>
+
 
 
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/jquery.min.js"></script>
+    <!-- Vendor JS-->
+    <script src="~/js/select2.min.js"></script>
+    <script src="~/js/moment.min.js"></script>
+    <script src="~/js/daterangepicker.js"></script>
+    <!-- Main JS-->
+    <script src="~/js/global.js"></script>
 }

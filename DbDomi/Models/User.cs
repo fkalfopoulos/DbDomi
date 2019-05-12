@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,13 +9,10 @@ namespace DbDomi.Models
 {
     public class User : IdentityUser
     {
-        public Role UserRole { get; set; }
-        public bool IsUserAllowed { get; set; }
-    }
-
-    public enum Role
-    {
-        Manager,
-        Client
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public DateTime RegisterDate { get; set; }
+        public string UserAvatar { get; set; }
+        public string Comment { get; set; }
     }
 }
